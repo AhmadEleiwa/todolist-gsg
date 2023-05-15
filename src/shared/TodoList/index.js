@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import TodoCard from "../TodoCard"
 
 const TodoList = props => {
     const [todos, setTodos] = useState([])
@@ -12,9 +13,26 @@ const TodoList = props => {
         .catch(err => console.log(err))
     }, [])
 
-    return <div >
+
+    const onDelete = id =>{
+        const x = todos.filter(p => p._id !==id)
+        console.log(x)
+        setTodos(x)
+        fetch('http://localhost:5500/api/todo/'+id, {
+            method:'delete',
+            
+        })
+
+    }
+    return <div style={{
+        width:'80%',
+        margin:'0 auto',
+        display:'flex',
+        flexDirection:'column',
+        gap:'1em'
+    }} >
         {todos.map((item, index) => {
-            return <p key={index}>{item.title}</p>
+            return <TodoCard key={item._id} onDelete={onDelete} id={item._id} title={item.title} desc={item.description} status={item.status} />
         })}
     </div>
 }
